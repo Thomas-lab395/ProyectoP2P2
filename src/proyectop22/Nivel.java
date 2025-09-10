@@ -6,14 +6,6 @@ package proyectop22;
 
 // Nivel.java
 public class Nivel {
-    /*
-     * Valores del mapa:
-     * 0 = vacío
-     * 1 = pared
-     * 2 = caja
-     * 3 = meta
-     * 9 = jugador (solo para definición, se convertirá a 0 y se fija playerX/playerY)
-     */
 
     public static int[][] getTutorial() {
         return new int[][] {
@@ -45,6 +37,6 @@ public class Nivel {
         };
     }
 
-    // Agrega más niveles si lo deseas...
+    
 }
 
