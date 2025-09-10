@@ -89,15 +89,11 @@ public class SokobanPanel extends JPanel implements KeyListener {
     }
 
     private boolean isWin() {
-        // gana cuando no existen cajas fuera de metas (i.e., cada caja está sobre 3)
+        // gana cuando no existen cajas fuera de metas 
         for (int y = 0; y < mapa.length; y++) {
             for (int x = 0; x < mapa[y].length; x++) {
                 if (mapa[y][x] == 2) {
-                    // caja fuera de meta => si en esta casilla no hay meta => busca si debajo hay meta?
-                    // Simplificamos: si en la definición original la casilla 3 existe, comprobamos por posit.
-                    // Alternativa simple: comprobamos si en la casilla hay meta en el diseño original (no disponible aquí).
-                    // En este diseño, consideramos que si sobre la posición final está la meta (valor 3) en mapa original,
-                    // pero como no guardamos original, haremos verificación básica: si hay alguna caja, no ganó.
+                 
                     return false;
                 }
             }

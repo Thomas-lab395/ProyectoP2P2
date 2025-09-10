@@ -24,7 +24,7 @@ public class MapaNiveles extends JPanel {
         setPreferredSize(new Dimension(800, 600));
 
         this.desbloqueados = new boolean[niveles];
-        // desbloqueo progresivo: 0 siempre desbloqueado, luego comprobar usuario
+       
         desbloqueados[0] = true;
         boolean[] comp = usuario.getNivelesCompletados();
         for (int i = 1; i < niveles; i++) {
@@ -32,7 +32,7 @@ public class MapaNiveles extends JPanel {
             desbloqueados[i] = comp[i - 1];
         }
 
-        // positions estilo "candy" en filas
+
         positions = new Point[niveles];
         int startX = 100, startY = 160, gapX = 100, gapY = 120;
         for (int i = 0; i < niveles; i++) {

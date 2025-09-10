@@ -81,7 +81,7 @@ public class LoginFrame extends JFrame {
         loginBtn.addActionListener(e -> iniciarSesion());
         registerBtn.addActionListener(e -> registrarUsuario());
 
-        // ==== Añadir al panel (menos espacio, más compacto) ====
+    
         panel.add(title);
         panel.add(Box.createVerticalStrut(10));
         panel.add(userField);
