@@ -22,7 +22,7 @@ public class LoginFrame extends JFrame {
 
         setTitle("Sokoban");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(600, 450);
+        setSize(700, 550);
         setLocationRelativeTo(null);
 
         // Panel con fondo escalado
@@ -47,7 +47,7 @@ public class LoginFrame extends JFrame {
 
         // ==== TÍTULO ====
         JLabel title = new JLabel("Bienvenido a la aventura", SwingConstants.CENTER);
-        title.setFont(new Font("Serif", Font.BOLD, 24));
+        title.setFont(new Font("SanSerif", Font.BOLD, 24));
         title.setForeground(new Color(255, 215, 0)); // dorado suave
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -105,7 +105,7 @@ public class LoginFrame extends JFrame {
     // ===== Métodos auxiliares =====
     private void estilizarCampo(JTextField campo, String placeholder) {
         campo.setBorder(BorderFactory.createTitledBorder(placeholder));
-        campo.setFont(new Font("SansSerif", Font.PLAIN, 15));
+        campo.setFont(new Font("SansSerif", Font.BOLD, 20));
         campo.setBackground(new Color(245, 245, 245));
         campo.setForeground(Color.BLACK);
         campo.setMaximumSize(new Dimension(300, 45));

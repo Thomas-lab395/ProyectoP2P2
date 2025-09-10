@@ -70,50 +70,64 @@ public class MapaNiveles extends JPanel {
         lf.setVisible(true);
     }
 
-    @Override
-    protected void paintComponent(Graphics g0) {
-        super.paintComponent(g0);
-        Graphics2D g = (Graphics2D) g0;
+@Override
+protected void paintComponent(Graphics g0) {
+    super.paintComponent(g0);
+    Graphics2D g = (Graphics2D) g0;
 
-        // Fondo
-        if (Recursos.fondoMapa != null) {
-            g.drawImage(Recursos.fondoMapa, 0, 0, getWidth(), getHeight(), this);
-        } else {
-            g.setColor(new Color(200, 230, 255));
-            g.fillRect(0, 0, getWidth(), getHeight());
-        }
-
-        // Dibuja burbujas / iconos de nivel (tipo candy)
-        for (int i = 0; i < posicionesLenght(); i++) {
-            int px = positions[i].x - 32;
-            int py = positions[i].y - 32;
-            if (desbloqueados[i]) {
-                if (Recursos.nivelLibre != null) g.drawImage(Recursos.nivelLibre, px, py, 64, 64, this);
-                else {
-                    g.setColor(new Color(255, 180, 180));
-                    g.fillRoundRect(px, py, 64, 64, 16, 16);
-                }
-            } else {
-                if (Recursos.nivelBloqueado != null) g.drawImage(Recursos.nivelBloqueado, px, py, 64, 64, this);
-                else {
-                    g.setColor(new Color(160, 160, 160, 220));
-                    g.fillRoundRect(px, py, 64, 64, 16, 16);
-                    g.setColor(Color.BLACK);
-                    g.drawString("Bloq", px + 10, py + 36);
-                }
-            }
-            // número
-            g.setColor(Color.WHITE);
-            g.setFont(new Font("Arial", Font.BOLD, 14));
-            g.drawString(String.valueOf(i + 1), px + 26, py + 38);
-        }
-
-        // info usuario
-        g.setColor(new Color(0,0,0,150));
-        g.setFont(new Font("Arial", Font.PLAIN, 14));
-        g.drawString("Usuario: " + usuario.getNombreCompleto(), 20, 30);
-        g.drawString("Puntos: " + usuario.getScore(), 20, 50);
+    // Fondo
+    if (Recursos.fondoMapa != null) {
+        g.drawImage(Recursos.fondoMapa, 0, 0, getWidth(), getHeight(), this);
+    } else {
+        g.setColor(new Color(200, 230, 255));
+        g.fillRect(0, 0, getWidth(), getHeight());
     }
+
+    // ==== Dibujar los cuadros de niveles (más grandes) ====
+    int size = 90; // tamaño nuevo
+    for (int i = 0; i < posicionesLenght(); i++) {
+        int px = positions[i].x - size / 2;
+        int py = positions[i].y - size / 2;
+
+        if (desbloqueados[i]) {
+            if (Recursos.nivelLibre != null) 
+                g.drawImage(Recursos.nivelLibre, px, py, size, size, this);
+            else {
+                g.setColor(new Color(255, 180, 180));
+                g.fillRoundRect(px, py, size, size, 20, 20);
+            }
+        } else {
+            if (Recursos.nivelBloqueado != null) 
+                g.drawImage(Recursos.nivelBloqueado, px, py, size, size, this);
+            else {
+                g.setColor(new Color(160, 160, 160, 220));
+                g.fillRoundRect(px, py, size, size, 20, 20);
+                g.setColor(Color.BLACK);
+                g.drawString("X", px + size/2 - 5, py + size/2 + 5);
+            }
+        }
+
+        // número de nivel en el centro
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("SansSerif", Font.BOLD, 20));
+        FontMetrics fm = g.getFontMetrics();
+        String num = String.valueOf(i + 1);
+        int tx = px + (size - fm.stringWidth(num)) / 2;
+        int ty = py + (size + fm.getAscent()) / 2 - 8;
+        g.drawString(num, tx, ty);
+    }
+
+    // ==== Caja superior de usuario y puntos ====
+    int boxWidth = 250;
+    int boxHeight = 60;
+    g.setColor(new Color(0, 0, 0, 180)); // fondo negro semitransparente
+    g.fillRoundRect(15, 15, boxWidth, boxHeight, 20, 20);
+
+    g.setColor(Color.WHITE);
+    g.setFont(new Font("SansSerif", Font.BOLD, 20));
+    g.drawString("Usuario: " + usuario.getNombreCompleto(), 30, 40);
+    g.drawString("Puntos: " + usuario.getScore(), 30, 65);
+}
 
     private int posicionesLenght() {
         return Math.min(niveles, positions.length);

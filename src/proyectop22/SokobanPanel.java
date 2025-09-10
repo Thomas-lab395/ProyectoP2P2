@@ -64,11 +64,18 @@ public class SokobanPanel extends JPanel implements KeyListener {
                 }
 
                 switch (mapa[y][x]) {
-                    case 1 -> { if (paredImg != null) g.drawImage(paredImg, px, py, tileSize, tileSize, this);
-                               else { g.setColor(Color.DARK_GRAY); g.fillRect(px, py, tileSize, tileSize); } }
-                    case 2 -> { if (cajaImg != null) g.drawImage(cajaImg, px, py, tileSize, tileSize, this);
-                               else { g.setColor(new Color(180,120,60)); g.fillRect(px+6, py+6, tileSize-12, tileSize-12); } }
-                    case 3 -> { if (metaImg != null) g.drawImage(metaImg, px, py, tileSize, tileSize, this);
+                    case 1 -> { 
+                        if (paredImg != null) 
+                            g.drawImage(paredImg, px, py, tileSize, tileSize, this);
+                               else { 
+                            g.setColor(Color.DARK_GRAY); g.fillRect(px, py, tileSize, tileSize); } }
+                    case 2 -> { if (cajaImg != null) 
+                        g.drawImage(cajaImg, px, py, tileSize, tileSize, this);
+                               else { 
+                        g.setColor(new Color(180,120,60)); g.fillRect(px+6, py+6, tileSize-12, tileSize-12); } }
+                    case 3 -> { 
+                        if (metaImg != null) 
+                            g.drawImage(metaImg, px, py, tileSize, tileSize, this);
                                else { g.setColor(Color.GREEN); g.fillOval(px+8, py+8, tileSize-16, tileSize-16); } }
                 }
             }
