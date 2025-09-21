@@ -1,0 +1,18 @@
+Jugador (1).DS_Store
+Jugador (2).jpg
+Jugador (2).png
+Jugador (3).png
+Jugador (4).png
+Jugador (5).png
+Jugador (6).png
+Jugador (7).png
+jugador.png.png
+libgdx.png
+pared.png.jpg
+ui/font-list.fnt
+ui/font-subtitle.fnt
+ui/font-window.fnt
+ui/font.fnt
+ui/uiskin.atlas
+ui/uiskin.json
+ui/uiskin.png
