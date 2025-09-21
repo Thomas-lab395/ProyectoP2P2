@@ -4,95 +4,175 @@
  */
 package proyectop22;
 
-// LoginFrame.java
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class LoginFrame extends JFrame {
-    private final UserManager userManager;
+    private JTextField userField;
+    private JPasswordField passField;
+    private JTextField nombreCompletoField;
+    private JButton loginBtn, registerBtn, toggleRegisterBtn;
+    private UserManager userManager;
+    private boolean modoRegistro = false;
 
-    public LoginFrame(UserManager userManager) {
-        this.userManager = userManager;
+    public LoginFrame(UserManager um) {
+        this.userManager = um;
 
-        setTitle("Sokoban - Inicio de Sesión");
-        setSize(420, 260);
+        setTitle("Sokoban");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(700, 550);
         setLocationRelativeTo(null);
 
-        JPanel panel = new JPanel(new GridBagLayout());
-        panel.setBackground(new Color(210, 230, 255));
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(8, 8, 8, 8);
+        // Panel con fondo escalado
+        JPanel background = new JPanel() {
+            Image bg = new ImageIcon(getClass().getResource("/res/fondo-login.jpg")).getImage();
 
-        JLabel lblUser = new JLabel("Usuario:");
-        JTextField txtUser = new JTextField(15);
-        JLabel lblPass = new JLabel("Contraseña:");
-        JPasswordField txtPass = new JPasswordField(15);
-
-        JButton btnLogin = new JButton("Iniciar Sesión");
-        JButton btnRegister = new JButton("Registrarse");
-
-        gbc.gridx = 0; gbc.gridy = 0; panel.add(lblUser, gbc);
-        gbc.gridx = 1; panel.add(txtUser, gbc);
-        gbc.gridx = 0; gbc.gridy = 1; panel.add(lblPass, gbc);
-        gbc.gridx = 1; panel.add(txtPass, gbc);
-
-        gbc.gridx = 0; gbc.gridy = 2; panel.add(btnLogin, gbc);
-        gbc.gridx = 1; panel.add(btnRegister, gbc);
-
-        add(panel);
-
-        btnLogin.addActionListener(e -> {
-            String user = txtUser.getText().trim();
-            String pass = new String(txtPass.getPassword());
-            if (user.isEmpty() || pass.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Ingrese usuario y contraseña.");
-                return;
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(bg, 0, 0, getWidth(), getHeight(), this);
             }
-            try {
-                Usuario u = userManager.authenticate(user, pass);
-                if (u != null) {
-                    JOptionPane.showMessageDialog(this, "Bienvenido " + u.getNombreCompleto());
-                    dispose();
-                    SwingUtilities.invokeLater(() -> new MenuPrincipal(u, userManager).setVisible(true));
-                } else {
-                    JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos");
-                }
-            } catch (IOException ex) {
-                JOptionPane.showMessageDialog(this, "Error autenticando: " + ex.getMessage());
-            }
+        };
+        background.setLayout(new GridBagLayout());
+        add(background);
+
+        // ==== PANEL CENTRAL ====
+        JPanel panel = new JPanel();
+        panel.setOpaque(true);
+        panel.setBackground(new Color(25, 25, 25, 220));
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
+
+        // ==== TÍTULO ====
+        JLabel title = new JLabel("Bienvenido a la aventura", SwingConstants.CENTER);
+        title.setFont(new Font("SanSerif", Font.BOLD, 24));
+        title.setForeground(new Color(255, 215, 0)); // dorado suave
+        title.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // ==== CAMPOS ====
+        userField = new JTextField();
+        estilizarCampo(userField, "Usuario");
+
+        passField = new JPasswordField();
+        estilizarCampo(passField, "Contraseña");
+
+        nombreCompletoField = new JTextField();
+        estilizarCampo(nombreCompletoField, "Nombre completo");
+        nombreCompletoField.setVisible(false);
+
+        // ==== BOTONES ====
+        loginBtn = crearBoton("Iniciar Sesión", Color.WHITE, new Color(230, 230, 230));
+        registerBtn = crearBoton("Registrarse", Color.WHITE, new Color(230, 230, 230));
+        toggleRegisterBtn = crearBoton("¿Nuevo? Crear cuenta", Color.WHITE, new Color(230, 230, 230));
+
+        // Eventos
+        toggleRegisterBtn.addActionListener(e -> {
+            modoRegistro = !modoRegistro;
+            nombreCompletoField.setVisible(modoRegistro);
+            loginBtn.setVisible(!modoRegistro);
+            registerBtn.setVisible(modoRegistro);
+            toggleRegisterBtn.setText(modoRegistro ? "← Volver a Iniciar Sesión" : "¿Nuevo? Crear cuenta");
+            revalidate();
+            repaint();
         });
 
-        btnRegister.addActionListener(e -> {
-            JTextField txtU = new JTextField();
-            JTextField txtN = new JTextField();
-            JPasswordField txtP = new JPasswordField();
+        loginBtn.addActionListener(e -> iniciarSesion());
+        registerBtn.addActionListener(e -> registrarUsuario());
 
-            Object[] msg = {
-                    "Usuario:", txtU,
-                    "Nombre Completo:", txtN,
-                    "Contraseña:", txtP
-            };
+        // ==== Añadir al panel (menos espacio, más compacto) ====
+        panel.add(title);
+        panel.add(Box.createVerticalStrut(10));
+        panel.add(userField);
+        panel.add(Box.createVerticalStrut(10));
+        panel.add(passField);
+        panel.add(Box.createVerticalStrut(10));
+        panel.add(nombreCompletoField);
+        panel.add(Box.createVerticalStrut(15));
+        panel.add(loginBtn);
+        panel.add(registerBtn);
+        panel.add(Box.createVerticalStrut(10));
+        panel.add(toggleRegisterBtn);
 
-            int opt = JOptionPane.showConfirmDialog(this, msg, "Registro", JOptionPane.OK_CANCEL_OPTION);
-            if (opt == JOptionPane.OK_OPTION) {
-                String u = txtU.getText().trim();
-                String n = txtN.getText().trim();
-                String p = new String(txtP.getPassword());
-                if (u.isEmpty() || n.isEmpty() || p.isEmpty()) {
-                    JOptionPane.showMessageDialog(this, "Complete todos los campos.");
-                    return;
-                }
-                try {
-                    Usuario newU = userManager.register(u, p, n);
-                    JOptionPane.showMessageDialog(this, "Usuario registrado con éxito.");
-                } catch (IllegalArgumentException ex) {
-                    JOptionPane.showMessageDialog(this, ex.getMessage());
-                } catch (IOException ex) {
-                    JOptionPane.showMessageDialog(this, "Error guardando usuario: " + ex.getMessage());
-                }
+        registerBtn.setVisible(false);
+
+        background.add(panel);
+
+        setVisible(true);
+    }
+
+    // ===== Métodos auxiliares =====
+    private void estilizarCampo(JTextField campo, String placeholder) {
+        campo.setBorder(BorderFactory.createTitledBorder(placeholder));
+        campo.setFont(new Font("SansSerif", Font.BOLD, 20));
+        campo.setBackground(new Color(245, 245, 245));
+        campo.setForeground(Color.BLACK);
+        campo.setMaximumSize(new Dimension(300, 45));
+    }
+
+    private JButton crearBoton(String texto, Color baseColor, Color hoverColor) {
+    JButton btn = new JButton(texto);
+    btn.setFont(new Font("SansSerif", Font.BOLD, 15));
+    btn.setBackground(baseColor);
+    btn.setForeground(new Color(50, 50, 50)); // gris oscuro para el texto
+    btn.setFocusPainted(false);
+    btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    btn.setMaximumSize(new Dimension(300, 40));
+    btn.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+    // Hover effect
+    btn.addMouseListener(new java.awt.event.MouseAdapter() {
+        public void mouseEntered(java.awt.event.MouseEvent e) { btn.setBackground(hoverColor); }
+        public void mouseExited(java.awt.event.MouseEvent e) { btn.setBackground(baseColor); }
+    });
+
+    return btn;
+}
+
+    private void iniciarSesion() {
+        String usuario = userField.getText();
+        String clave = new String(passField.getPassword());
+        try {
+            Usuario u = userManager.authenticate(usuario, clave);
+            if (u != null) {
+                JOptionPane.showMessageDialog(this, "¡Bienvenido " + u.getNombreCompleto() + "!");
+                dispose();
+                mostrarMapa(u);
+            } else {
+                JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos");
             }
-        });
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error al iniciar sesión: " + ex.getMessage());
+        }
+    }
+
+    private void registrarUsuario() {
+        String usuario = userField.getText();
+        String clave = new String(passField.getPassword());
+        String nombreCompleto = nombreCompletoField.getText();
+
+        if (usuario.isEmpty() || clave.isEmpty() || nombreCompleto.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Completa usuario, contraseña y nombre completo.");
+            return;
+        }
+
+        try {
+            Usuario nuevo = userManager.register(usuario, clave, nombreCompleto);
+            JOptionPane.showMessageDialog(this, "Usuario registrado correctamente. Bienvenido " + nuevo.getNombreCompleto());
+            dispose();
+            mostrarMapa(nuevo);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error al registrar: " + ex.getMessage());
+        }
+    }
+
+    private void mostrarMapa(Usuario u) {
+        JFrame frameMapa = new JFrame("Mapa de Niveles");
+        frameMapa.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frameMapa.setSize(800, 600);
+        frameMapa.setLocationRelativeTo(null);
+        frameMapa.add(new MapaNiveles(u, userManager));
+        frameMapa.setVisible(true);
     }
 }
