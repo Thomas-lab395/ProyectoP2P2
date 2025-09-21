@@ -69,4 +69,5 @@ public class Player {
 
     public void setStateWalk(Direction dir) {
         currentDir = dir;
-
+    }
+}

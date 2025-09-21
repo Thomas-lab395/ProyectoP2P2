@@ -6,9 +6,46 @@ Jugador (4).png
 Jugador (5).png
 Jugador (6).png
 Jugador (7).png
+audio/click.mp3
+audio/defeat.mp3
+audio/game.mp3
+audio/goal.mp3
+audio/menu.mp3
+audio/move.mp3
+audio/nextLevel.mp3
+audio/pushBox.mp3
+audio/reset.mp3
+audio/victory.mp3
+audio/win.mp3
+back_idle.png
+back_walk1.png
+back_walk2.png
+box.png
+caja.png
+front_walk1.png
+front_walk2.png
+idle_left.png
+idle_right.png
 jugador.png.png
+levels/level.txt
 libgdx.png
+meta.png
+pared.png
 pared.png.jpg
+piso.png
+player_up.png
+push_down1.png
+push_down2.png
+push_down_mid.png
+push_left1.png
+push_left2.png
+push_left_mid.png
+push_right1.png
+push_right2.png
+push_right_mid.png
+push_up1.png
+push_up2.png
+push_up_mid.png
 ui/font-list.fnt
 ui/font-subtitle.fnt
 ui/font-window.fnt
@@ -16,3 +53,7 @@ ui/font.fnt
 ui/uiskin.atlas
 ui/uiskin.json
 ui/uiskin.png
+walk_left1.png
+walk_left2.png
+walk_right1.png
+walk_right2.png
