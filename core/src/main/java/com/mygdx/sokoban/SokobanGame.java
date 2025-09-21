@@ -7,35 +7,32 @@ public class SokobanGame extends Game {
     public SpriteBatch batch;
     public UserManager userManager;
 
-    // --- MÉTODOS GETTER AÑADIDOS ---
-    public SpriteBatch getBatch() {
-        return batch;
-    }
-
-    public UserManager getUserManager() {
-        return userManager;
-    }
-
     @Override
     public void create() {
+        // Inicializar objetos globales
         batch = new SpriteBatch();
         userManager = new UserManager();
+
+        // Cargar todos los assets antes de mostrar pantalla
         Assets.load();
         Assets.manager.finishLoading();
-        this.setScreen(new LoginScreen(this));
+
+        // Pantalla inicial
+        setScreen(new LoginScreen(this));
     }
 
     @Override
     public void render() {
-        super.render();
+        super.render(); // delega el render a la pantalla activa
     }
 
     @Override
     public void dispose() {
-        batch.dispose();
-        Assets.dispose();
+        // Liberar recursos en orden
         if (getScreen() != null) {
             getScreen().dispose();
         }
+        batch.dispose();
+        Assets.dispose();
     }
 }
